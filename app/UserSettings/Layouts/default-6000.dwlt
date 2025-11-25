@@ -452,7 +452,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 01ca9a3b
     m_LastClickedID: 1000000001
-    m_ExpandedIDs: 00000000f0cd0000f2cd0000f4cd0000f6cd0000f8cd0000facd0000fccd0000
+    m_ExpandedIDs: 00000000d4010100d6010100d8010100da010100dc010100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -481,7 +481,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000f0cd0000f2cd0000f4cd0000f6cd0000f8cd0000facd0000fccd0000
+    m_ExpandedIDs: 00000000d4010100d6010100d8010100da010100dc010100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1177,9 +1177,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 7.217126, y: 3.0470352, z: -5.9091196}
+    m_Target: {x: -5.3547544, y: 0.32998887, z: 1.0305296}
     speed: 2
-    m_Value: {x: -3.81, y: 2.02, z: -2.8389997}
+    m_Value: {x: 7.217126, y: 3.0470352, z: -5.9091196}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1225,13 +1225,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.041024834, y: 0.8057449, z: -0.05616824, w: 0.5882196}
+    m_Target: {x: -0.05653764, y: 0.93976015, z: -0.19148687, w: -0.27747002}
     speed: 2
-    m_Value: {x: 0, y: 1, z: 0, w: 0}
+    m_Value: {x: 0.041024838, y: 0.8057449, z: -0.05616824, w: 0.5882196}
   m_Size:
-    m_Target: 6.43077
+    m_Target: 9.650804
     speed: 2
-    m_Value: 5.2219596
+    m_Value: 6.43077
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1307,7 +1307,7 @@ MonoBehaviour:
   m_ShowGizmos: 0
   m_TargetDisplay: 0
   m_ClearColor: {r: 0, g: 0, b: 0, a: 0}
-  m_TargetSize: {x: 914, y: 639.6667}
+  m_TargetSize: {x: 1142.5, y: 799.5834}
   m_TextureFilterMode: 0
   m_TextureHideFlags: 61
   m_RenderIMGUI: 1
@@ -1322,10 +1322,10 @@ MonoBehaviour:
     m_VRangeLocked: 0
     hZoomLockedByDefault: 0
     vZoomLockedByDefault: 0
-    m_HBaseRangeMin: -365.6
-    m_HBaseRangeMax: 365.6
-    m_VBaseRangeMin: -255.86668
-    m_VBaseRangeMax: 255.86668
+    m_HBaseRangeMin: -457
+    m_HBaseRangeMax: 457
+    m_VBaseRangeMin: -319.83334
+    m_VBaseRangeMax: 319.83334
     m_HAllowExceedBaseRangeMin: 1
     m_HAllowExceedBaseRangeMax: 1
     m_VAllowExceedBaseRangeMin: 1
