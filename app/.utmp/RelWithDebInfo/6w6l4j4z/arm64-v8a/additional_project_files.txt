@@ -1,0 +1,17 @@
+D:\fii\anul_iii\semestrul1\introducere_realitati_mixte\proiect_imr\Proiect_IMR_2025_2026\app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\GAToUnityCallbacks.h
+D:\fii\anul_iii\semestrul1\introducere_realitati_mixte\proiect_imr\Proiect_IMR_2025_2026\app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\MacroEnd.h
+D:\fii\anul_iii\semestrul1\introducere_realitati_mixte\proiect_imr\Proiect_IMR_2025_2026\app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\MacroHeaderBegin.h
+D:\fii\anul_iii\semestrul1\introducere_realitati_mixte\proiect_imr\Proiect_IMR_2025_2026\app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\MacroSourceBegin.h
+D:\fii\anul_iii\semestrul1\introducere_realitati_mixte\proiect_imr\Proiect_IMR_2025_2026\app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UGAApplication.h
+D:\fii\anul_iii\semestrul1\introducere_realitati_mixte\proiect_imr\Proiect_IMR_2025_2026\app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UGAConfiguration.h
+D:\fii\anul_iii\semestrul1\introducere_realitati_mixte\proiect_imr\Proiect_IMR_2025_2026\app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UGADebug.h
+D:\fii\anul_iii\semestrul1\introducere_realitati_mixte\proiect_imr\Proiect_IMR_2025_2026\app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UGAEvents.h
+D:\fii\anul_iii\semestrul1\introducere_realitati_mixte\proiect_imr\Proiect_IMR_2025_2026\app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UGAInput.h
+D:\fii\anul_iii\semestrul1\introducere_realitati_mixte\proiect_imr\Proiect_IMR_2025_2026\app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UGASoftKeyboard.h
+D:\fii\anul_iii\semestrul1\introducere_realitati_mixte\proiect_imr\Proiect_IMR_2025_2026\app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UGASoftKeyboardCallbacks.h
+D:\fii\anul_iii\semestrul1\introducere_realitati_mixte\proiect_imr\Proiect_IMR_2025_2026\app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UGATypes.h
+D:\fii\anul_iii\semestrul1\introducere_realitati_mixte\proiect_imr\Proiect_IMR_2025_2026\app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UGAVersion.h
+D:\fii\anul_iii\semestrul1\introducere_realitati_mixte\proiect_imr\Proiect_IMR_2025_2026\app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UnityToGACallbacks.h
+D:\fii\anul_iii\semestrul1\introducere_realitati_mixte\proiect_imr\Proiect_IMR_2025_2026\app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UnityToGAConfigurationCallbacks.h
+D:\fii\anul_iii\semestrul1\introducere_realitati_mixte\proiect_imr\Proiect_IMR_2025_2026\app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UnityToGAKeyEventCallbacks.h
+D:\fii\anul_iii\semestrul1\introducere_realitati_mixte\proiect_imr\Proiect_IMR_2025_2026\app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UnityToGAMotionEventCallbacks.h

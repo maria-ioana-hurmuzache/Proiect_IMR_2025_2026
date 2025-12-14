@@ -1,0 +1,5 @@
+D:/fii/anul_iii/semestrul1/introducere_realitati_mixte/proiect_imr/Proiect_IMR_2025_2026/app/.utmp/RelWithDebInfo/6w6l4j4z/arm64-v8a/CMakeFiles/edit_cache.dir
+D:/fii/anul_iii/semestrul1/introducere_realitati_mixte/proiect_imr/Proiect_IMR_2025_2026/app/.utmp/RelWithDebInfo/6w6l4j4z/arm64-v8a/CMakeFiles/rebuild_cache.dir
+D:/fii/anul_iii/semestrul1/introducere_realitati_mixte/proiect_imr/Proiect_IMR_2025_2026/app/.utmp/RelWithDebInfo/6w6l4j4z/arm64-v8a/GameActivity/CMakeFiles/game.dir
+D:/fii/anul_iii/semestrul1/introducere_realitati_mixte/proiect_imr/Proiect_IMR_2025_2026/app/.utmp/RelWithDebInfo/6w6l4j4z/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
+D:/fii/anul_iii/semestrul1/introducere_realitati_mixte/proiect_imr/Proiect_IMR_2025_2026/app/.utmp/RelWithDebInfo/6w6l4j4z/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir
