@@ -1,10 +1,10 @@
 # ninja log v5
-351	9446	7866518537262118	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	d846914ae624080b
-331	9523	7866518537418228	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	9770800bc27146
-310	9573	7866518538572417	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	76fa95bd6f5778e7
-395	9666	7866518539285428	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	3d003625da56ba03
-2	9766	7866518540461083	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	bfffaa4b1ba8f55
-371	10605	7866518548980672	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	4d990d6c81206981
-434	10735	7866518550335375	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	7f86f6d346f0e69
-248	10946	7866518552366704	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	fb4ae6379e0d13c6
-10946	11395	7866518556932817	D:/fii/anul_iii/semestrul1/introducere_realitati_mixte/proiect_imr/Proiect_IMR_2025_2026/app/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6w6l4j4z/obj/arm64-v8a/libgame.so	59b3d61308b6e1d9
+31	2165	7896767856127641	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	d846914ae624080b
+23	2176	7896767856196134	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	9770800bc27146
+1	2178	7896767856287695	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	76fa95bd6f5778e7
+64	2185	7896767856406644	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	3d003625da56ba03
+8	2229	7896767856846108	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	bfffaa4b1ba8f55
+51	2357	7896767858141313	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	7f86f6d346f0e69
+40	2484	7896767859386742	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	4d990d6c81206981
+15	2575	7896767860287369	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	fb4ae6379e0d13c6
+2575	2697	7896767861546669	D:/fii/anul_iii/semestrul1/introducere_realitati_mixte/proiect_imr/Proiect_IMR_2025_2026/app/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6w6l4j4z/obj/arm64-v8a/libgame.so	59b3d61308b6e1d9
