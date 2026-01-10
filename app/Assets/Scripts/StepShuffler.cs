@@ -1,128 +1,135 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class StepShuffler : MonoBehaviour
 {
-    // Lista de referințe către paginile copil (Page 1, Page 2, etc.)
     private List<GameObject> pages = new List<GameObject>();
+    public float animationDuration = 0.25f;
+    public Vector3 exitOffset = new Vector3(0, 0.3f, 0); 
+    
+    [Header("Floating Settings")]
+    public float targetHeight = 1f;
+    public float floatStrength = 5f;
 
-    // Setări de animație (Setează aceste valori în Inspector!)
-    public float animationDuration = 0.3f;
-    
-    // Deplasarea paginii la ieșire (1000f pe Y ar trebui să fie suficient pentru a ieși din cadru)
-    public Vector3 exitOffset = new Vector3(0, 1000f, 0); 
-    
-    // Indexul paginii vizibile curente în pachet
-    private int currentPageIndex = 0;
     private bool isShuffling = false;
+    private XRGrabInteractable grabInteractable;
+    private Rigidbody rb;
 
-    void Awake()
+    void Start() 
     {
-        // 1. Colectează toate GameObjects-urile copil (paginile)
+        rb = GetComponent<Rigidbody>();
+        grabInteractable = GetComponent<XRGrabInteractable>();
+        
+        if (grabInteractable != null)
+        {
+            grabInteractable.activated.AddListener(OnStepActivated);
+        }
+
+        pages.Clear();
         foreach (Transform child in transform)
         {
-            pages.Add(child.gameObject);
-        }
-
-        if (pages.Count == 0)
-        {
-            Debug.LogError($"Step '{gameObject.name}' nu conține pagini copil.");
-            return;
-        }
-
-        // 2. Configurează starea inițială
-        for (int i = 0; i < pages.Count; i++)
-        {
-            // Doar prima pagină activă la început
-            pages[i].SetActive(i == 0); 
-            
-            // Setăm ordinea în ierarhie. Obiectele cu index mai mic sunt afișate deasupra.
-            pages[i].transform.SetSiblingIndex(i); 
+            // Verificăm să fie pagină și să nu fie un AttachPoint
+            if (child.name.Contains("Page")) 
+            {
+                pages.Add(child.gameObject);
+            }
         }
         
-        Debug.Log($"Step {gameObject.name} inițializat cu {pages.Count} pagini.");
+        Debug.Log($"<color=green>[StepShuffler]</color> Inițializat pe {gameObject.name}. Pagini: {pages.Count}");
     }
-    
-    /// <summary>
-    /// Metodă publică apelată de evenimentul Select Entered/Activated al XR Simple Interactable.
-    /// </summary>
-    public void OnPageClicked()
+
+    void Update()
     {
-        // Ajută la debugging-ul XR. Dacă vezi acest mesaj, interacțiunea XR funcționează!
-        Debug.Log($"[XR-Hit] Click detectat pe {gameObject.name}. Index curent: {currentPageIndex}");
-        
-        if (isShuffling)
+        // Debug pentru calculator
+        if (grabInteractable != null && grabInteractable.isSelected)
         {
-            return;
+            if (UnityEngine.InputSystem.Keyboard.current.spaceKey.wasPressedThisFrame)
+            {
+                ShuffleTopPage();
+            }
         }
-        
-        // Verifică dacă am ajuns la ultima pagină
-        if (currentPageIndex == pages.Count - 1)
-        {
-            // Dacă este ultima pagină, ascundem întregul Step.
-            HideEntireStep();
-            return;
-        }
-
-        // Treci la următoarea pagină
-        ShuffleNextPage();
     }
 
-
-    private void ShuffleNextPage()
+    // Această metodă se ocupă de plutire când nu ținem obiectul
+    void FixedUpdate()
     {
-        GameObject leavingPage = pages[currentPageIndex];
-        
-        int nextPageIndex = currentPageIndex + 1;
-        
-        // Verificare suplimentară împotriva erorilor de index
-        if (nextPageIndex >= pages.Count)
+        if (grabInteractable != null && !grabInteractable.isSelected && !rb.isKinematic)
         {
-            HideEntireStep();
-            return;
+            float heightError = targetHeight - transform.position.y;
+            rb.AddForce(Vector3.up * heightError * floatStrength, ForceMode.Acceleration);
         }
-
-        GameObject comingPage = pages[nextPageIndex];
-
-        // Animația începe
-        StartCoroutine(AnimatePageTransition(leavingPage, comingPage));
     }
-    
-    // Corutina care gestionează mișcarea
-    IEnumerator AnimatePageTransition(GameObject leavingPage, GameObject comingPage)
+
+    private void OnStepActivated(ActivateEventArgs args)
+    {
+        ShuffleTopPage();
+    }
+
+    public void ShuffleTopPage()
+    {
+        if (isShuffling || pages.Count <= 1) return;
+        StartCoroutine(AnimatePageTransition(pages[0]));
+    }
+
+    IEnumerator AnimatePageTransition(GameObject leavingPage)
     {
         isShuffling = true;
-        
-        // 1. Pregătirea paginii următoare
-        comingPage.SetActive(true);
-        comingPage.transform.SetAsLastSibling(); // Mută-l în spatele ierarhiei pentru a fi cel mai de jos (dar activ)
-        
-        // 2. Animația de ieșire a paginii curente (de sus)
-        float startTime = Time.time;
-        Vector3 startPos = leavingPage.transform.localPosition;
 
-        while (Time.time < startTime + animationDuration)
+        // 1. Gestionare Rigidbody (Evităm conflictele cu Grab)
+        // Dacă îl ținem în mână, e deja Kinematic, nu trebuie să facem nimic.
+        // Dacă nu îl ținem, îl facem Kinematic doar pe durata animației.
+        bool wasKinematicBefore = rb.isKinematic;
+        rb.isKinematic = true; 
+
+        Transform originalParent = transform;
+        
+        // Salvăm orientarea corectă față de "sus-ul" manualului
+        Vector3 worldStartPos = leavingPage.transform.position;
+        Vector3 upDirection = originalParent.up; 
+
+        leavingPage.transform.SetParent(null); // Deparentare pentru mișcare liberă
+
+        // 2. Animația
+        float elapsedTime = 0;
+        Vector3 targetWorldPos = worldStartPos + (upDirection * exitOffset.y);
+
+        while (elapsedTime < animationDuration)
         {
-            float t = (Time.time - startTime) / animationDuration;
-            // Mută pagina vizibil în direcția exitOffset
-            leavingPage.transform.localPosition = Vector3.Lerp(startPos, startPos + exitOffset, t);
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.SmoothStep(0, 1, elapsedTime / animationDuration);
+            leavingPage.transform.position = Vector3.Lerp(worldStartPos, targetWorldPos, t);
             yield return null;
         }
+
+        // 3. Resetare ierarhie și poziție
+        leavingPage.transform.SetParent(originalParent);
+        leavingPage.transform.SetAsFirstSibling(); // Trimite la fundul teancului
         
-        // 3. Finalizarea tranziției
-        leavingPage.transform.localPosition = startPos; // Resetează poziția (pentru reutilizare)
-        leavingPage.SetActive(false); // Dezactivează pagina care a plecat
-        
-        // 4. Actualizează indexul
-        currentPageIndex++;
-        
+        leavingPage.transform.localPosition = Vector3.zero;
+        leavingPage.transform.localRotation = Quaternion.identity;
+
+        // 4. REACTIVARE FIZICĂ (Logic Corectă)
+        // Dacă utilizatorul a dat drumul manualului în timpul animației, reactivăm fizica.
+        // Dacă utilizatorul ÎNCĂ ȚINE manualul, îl lăsăm Kinematic (altfel XR Grab se strică).
+        if (grabInteractable != null && !grabInteractable.isSelected)
+        {
+            rb.isKinematic = false;
+            rb.WakeUp();
+        }
+
+        // 5. Update Listă
+        pages.RemoveAt(0);
+        pages.Add(leavingPage);
+
         isShuffling = false;
     }
-    
-    public void HideEntireStep()
+
+    private void OnDestroy()
     {
-        gameObject.SetActive(false);
-        Debug.Log($"Pachetul '{gameObject.name}' complet terminat și ascuns.");
+        if (grabInteractable != null)
+            grabInteractable.activated.RemoveListener(OnStepActivated);
     }
 }
