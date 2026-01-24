@@ -1,135 +1,144 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class StepShuffler : MonoBehaviour
 {
-    private List<GameObject> pages = new List<GameObject>();
-    public float animationDuration = 0.25f;
-    public Vector3 exitOffset = new Vector3(0, 0.3f, 0); 
-    
-    [Header("Floating Settings")]
-    public float targetHeight = 1f;
-    public float floatStrength = 5f;
+    [Header("References")]
+    [SerializeField] private Transform pagesContainer;
 
-    private bool isShuffling = false;
+    [Header("Shuffle Animation")]
+    [SerializeField] private float animationDuration = 0.25f;
+    [SerializeField] private float exitHeight = 0.15f; 
+
+    [Header("Input")]
+    [SerializeField] private InputActionReference shuffleAction;
+    [SerializeField] private float pageDepthOffset = 0.0005f;
+
+    private readonly List<Transform> pages = new();
     private XRGrabInteractable grabInteractable;
     private Rigidbody rb;
 
-    void Start() 
+    private bool isShuffling = false;
+    private bool isHeld = false;
+    
+    // Salvăm poziția X și Y inițială a primei pagini pentru a păstra alinierea
+    private Vector2 initialXY;
+    private Vector3 containerInitialLocalPos;
+
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         grabInteractable = GetComponent<XRGrabInteractable>();
         
-        if (grabInteractable != null)
-        {
-            grabInteractable.activated.AddListener(OnStepActivated);
-        }
+        if(rb) rb.isKinematic = true;
+    }
 
-        pages.Clear();
-        foreach (Transform child in transform)
+    private void OnEnable()
+    {
+        grabInteractable.selectEntered.AddListener(OnGrabbed);
+        grabInteractable.selectExited.AddListener(OnReleased);
+        if (shuffleAction != null) shuffleAction.action.Enable();
+    }
+
+    private void OnDisable()
+    {
+        grabInteractable.selectEntered.RemoveListener(OnGrabbed);
+        grabInteractable.selectExited.RemoveListener(OnReleased);
+        if (shuffleAction != null) shuffleAction.action.Disable();
+    }
+
+    private void Start()
+    {
+        // Memorăm exact unde ai pus tu PagesContainer în editor față de Step-ul respectiv
+        if (pagesContainer != null)
         {
-            // Verificăm să fie pagină și să nu fie un AttachPoint
-            if (child.name.Contains("Page")) 
-            {
-                pages.Add(child.gameObject);
-            }
+            containerInitialLocalPos = pagesContainer.localPosition;
         }
         
-        Debug.Log($"<color=green>[StepShuffler]</color> Inițializat pe {gameObject.name}. Pagini: {pages.Count}");
+        RefreshPagesListOnly();
+        ApplyDepthOffsets();
     }
 
-    void Update()
+    private void Update()
     {
-        // Debug pentru calculator
-        if (grabInteractable != null && grabInteractable.isSelected)
-        {
-            if (UnityEngine.InputSystem.Keyboard.current.spaceKey.wasPressedThisFrame)
-            {
-                ShuffleTopPage();
-            }
-        }
+        if (!isHeld || isShuffling || pages.Count <= 1) return;
+
+        bool inputDetected = (shuffleAction != null && shuffleAction.action.WasPressedThisFrame()) ||
+                             (Keyboard.current != null && Keyboard.current.rightArrowKey.wasPressedThisFrame);
+
+        if (inputDetected) StartCoroutine(AnimateShuffleFull(pages[0]));
     }
 
-    // Această metodă se ocupă de plutire când nu ținem obiectul
-    void FixedUpdate()
-    {
-        if (grabInteractable != null && !grabInteractable.isSelected && !rb.isKinematic)
-        {
-            float heightError = targetHeight - transform.position.y;
-            rb.AddForce(Vector3.up * heightError * floatStrength, ForceMode.Acceleration);
-        }
-    }
+    private void OnGrabbed(SelectEnterEventArgs args) => isHeld = true;
+    private void OnReleased(SelectExitEventArgs args) { isHeld = false; if(rb) rb.isKinematic = true; }
 
-    private void OnStepActivated(ActivateEventArgs args)
-    {
-        ShuffleTopPage();
-    }
-
-    public void ShuffleTopPage()
-    {
-        if (isShuffling || pages.Count <= 1) return;
-        StartCoroutine(AnimatePageTransition(pages[0]));
-    }
-
-    IEnumerator AnimatePageTransition(GameObject leavingPage)
+    private IEnumerator AnimateShuffleFull(Transform page)
     {
         isShuffling = true;
 
-        // 1. Gestionare Rigidbody (Evităm conflictele cu Grab)
-        // Dacă îl ținem în mână, e deja Kinematic, nu trebuie să facem nimic.
-        // Dacă nu îl ținem, îl facem Kinematic doar pe durata animației.
-        bool wasKinematicBefore = rb.isKinematic;
-        rb.isKinematic = true; 
-
-        Transform originalParent = transform;
+        Vector3 startPos = page.localPosition;
+        // Ridicăm pagina pe axa Y locală, păstrând X-ul ei original
+        Vector3 peakPos = new Vector3(startPos.x, startPos.y + exitHeight, startPos.z);
         
-        // Salvăm orientarea corectă față de "sus-ul" manualului
-        Vector3 worldStartPos = leavingPage.transform.position;
-        Vector3 upDirection = originalParent.up; 
-
-        leavingPage.transform.SetParent(null); // Deparentare pentru mișcare liberă
-
-        // 2. Animația
-        float elapsedTime = 0;
-        Vector3 targetWorldPos = worldStartPos + (upDirection * exitOffset.y);
-
-        while (elapsedTime < animationDuration)
+        float elapsed = 0f;
+        while (elapsed < animationDuration)
         {
-            elapsedTime += Time.deltaTime;
-            float t = Mathf.SmoothStep(0, 1, elapsedTime / animationDuration);
-            leavingPage.transform.position = Vector3.Lerp(worldStartPos, targetWorldPos, t);
+            elapsed += Time.deltaTime;
+            page.localPosition = Vector3.Lerp(startPos, peakPos, Mathf.SmoothStep(0, 1, elapsed / animationDuration));
             yield return null;
         }
 
-        // 3. Resetare ierarhie și poziție
-        leavingPage.transform.SetParent(originalParent);
-        leavingPage.transform.SetAsFirstSibling(); // Trimite la fundul teancului
+        page.SetAsLastSibling();
+        RefreshPagesListOnly();
         
-        leavingPage.transform.localPosition = Vector3.zero;
-        leavingPage.transform.localRotation = Quaternion.identity;
+        // Calculăm noua poziție Z (la fundul teancului)
+        float targetZ = -(pages.Count - 1) * pageDepthOffset;
+        Vector3 finalPos = new Vector3(initialXY.x, initialXY.y, targetZ);
+        Vector3 dropPeak = new Vector3(initialXY.x, initialXY.y + exitHeight, targetZ);
 
-        // 4. REACTIVARE FIZICĂ (Logic Corectă)
-        // Dacă utilizatorul a dat drumul manualului în timpul animației, reactivăm fizica.
-        // Dacă utilizatorul ÎNCĂ ȚINE manualul, îl lăsăm Kinematic (altfel XR Grab se strică).
-        if (grabInteractable != null && !grabInteractable.isSelected)
+        page.localPosition = dropPeak;
+        page.localRotation = Quaternion.identity;
+
+        elapsed = 0f;
+        while (elapsed < animationDuration)
         {
-            rb.isKinematic = false;
-            rb.WakeUp();
+            elapsed += Time.deltaTime;
+            page.localPosition = Vector3.Lerp(dropPeak, finalPos, Mathf.SmoothStep(0, 1, elapsed / animationDuration));
+            yield return null;
         }
 
-        // 5. Update Listă
-        pages.RemoveAt(0);
-        pages.Add(leavingPage);
-
         isShuffling = false;
+        ApplyDepthOffsets();
     }
 
-    private void OnDestroy()
+    private void ApplyDepthOffsets()
     {
-        if (grabInteractable != null)
-            grabInteractable.activated.RemoveListener(OnStepActivated);
+        for (int i = 0; i < pages.Count; i++)
+        {
+            // Luăm poziția locală așa cum ai setat-o tu manual în Editor
+            Vector3 currentLocalPos = pages[i].localPosition;
+
+            // Calculăm adâncimea dorită
+            float targetZ = -i * pageDepthOffset;
+
+            // Păstrăm X și Y intacte (cele setate de tine), schimbăm doar Z
+            pages[i].localPosition = new Vector3(currentLocalPos.x, currentLocalPos.y, targetZ);
+            
+            // Resetăm rotația să fie aliniată cu containerul
+            pages[i].localRotation = Quaternion.identity;
+        }
+    }
+
+    private void RefreshPagesListOnly()
+    {
+        pages.Clear();
+        foreach (Transform child in pagesContainer)
+        {
+            if (child.CompareTag("Page")) pages.Add(child);
+        }
     }
 }
