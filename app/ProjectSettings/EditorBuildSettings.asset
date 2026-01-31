@@ -6,14 +6,29 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/1 Start Scene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Scenes/Test - versiune nous.unity
-    guid: 6135c9ad4ab4f29418edcafdb4a951e5
+    path: Assets/Scenes/MainMenu.unity
+    guid: e8c3386b77c419140b0e248ef21f7422
+  - enabled: 0
+    path: Assets/Scenes/TemplateStreetScene.unity
+    guid: c7d99b291325d924b81bc099d77942d6
+  - enabled: 0
+    path: Assets/Scenes/Tutorial.unity
+    guid: 8141b0f4b589fcf4fa2e1d68c04b9679
   - enabled: 1
     path: Assets/Scenes/Tutorial - cpr bar.unity
     guid: b645d00e96a7a5b4cba75c47a9091de7
+  - enabled: 0
+    path: Assets/Scenes/Training.unity
+    guid: 8fb0c63c103d6f746a012aa450e3d211
+  - enabled: 0
+    path: Assets/Scenes/Test.unity
+    guid: ab50d83ca91892f4cae8b614b005cff3
+  - enabled: 1
+    path: Assets/Scenes/Test - versiune noua.unity
+    guid: 6135c9ad4ab4f29418edcafdb4a951e5
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 4af1a4384e2b51c45b05a162deebac6b, type: 2}
