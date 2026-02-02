@@ -42,38 +42,33 @@ public class StepShuffler : MonoBehaviour
         if (shuffleAction != null) shuffleAction.action.Enable();
     }
 
-    // Modificăm Start să fie mai robust
-private IEnumerator Start()
-{
-    if (pagesContainer == null) yield break;
-
-    // Așteptăm un moment pentru stabilitate
-    yield return new WaitForEndOfFrame();
-
-    RefreshPagesListOnly();
-    
-    // FORȚĂM originea. Nu mai citim din pagini, 
-    // deoarece am resetat paginile la (0,0,0) în Editor.
-    fixedPageXY = Vector2.zero; 
-
-    ApplyDepthOffsets();
-    
-    Debug.Log($"[StepShuffler] Paginile au fost aliniate la centrul local al {pagesContainer.name}");
-}
-private void ApplyDepthOffsets()
-{
-    for (int i = 0; i < pages.Count; i++)
+    private IEnumerator Start()
     {
-        float targetZ = -i * pageDepthOffset;
-        // Folosim LocalPosition pentru a rămâne lipite de "Step 1" oriunde s-ar mișca el
-        pages[i].localPosition = new Vector3(fixedPageXY.x, fixedPageXY.y, targetZ);
-        pages[i].localRotation = Quaternion.identity;
+        if (pagesContainer == null) yield break;
+
+        // se astepta un moment pentru stabilitate (xrit se calibreaza)
+        yield return new WaitForEndOfFrame();
+
+        RefreshPagesListOnly();
+    
+        fixedPageXY = Vector2.zero; 
+
+        ApplyDepthOffsets();
         
-        // Asigură-te că paginile nu au alt Rigidbody!
-        Rigidbody rbChild = pages[i].GetComponent<Rigidbody>();
-        if(rbChild) Destroy(rbChild); 
+        Debug.Log($"[StepShuffler] Paginile au fost aliniate la centrul local al {pagesContainer.name}");
     }
-}
+    private void ApplyDepthOffsets()
+    {
+        for (int i = 0; i < pages.Count; i++)
+        {
+            float targetZ = -i * pageDepthOffset;
+            pages[i].localPosition = new Vector3(fixedPageXY.x, fixedPageXY.y, targetZ);
+            pages[i].localRotation = Quaternion.identity;
+            
+            Rigidbody rbChild = pages[i].GetComponent<Rigidbody>();
+            if(rbChild) Destroy(rbChild); 
+        }
+    }
     private void Update()
     {
         if (!isHeld || isShuffling || pages.Count <= 1) return;
