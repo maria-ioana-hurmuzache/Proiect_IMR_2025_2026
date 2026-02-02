@@ -124,4 +124,13 @@ public class TrafficLight : MonoBehaviour
             }
         }
     }
+    
+    // Adaugă la începutul clasei
+    public GameSessionManager gameManager; 
+
+// Metodă nouă pentru a verifica dacă e sigur de traversat
+    public bool IsSafeToCross() {
+        // În logica ta, pietonii au VERDE doar când masinile au ROSU
+        return currentPhase == LightPhase.Red; 
+    }
 }
