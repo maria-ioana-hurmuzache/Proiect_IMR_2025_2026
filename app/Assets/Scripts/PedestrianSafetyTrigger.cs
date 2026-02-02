@@ -1,27 +1,38 @@
 using UnityEngine;
 
-public class PedestrianSafetyTrigger : MonoBehaviour {
+public class PedestrianSafetyTrigger : MonoBehaviour 
+{
     public TrafficLight trafficLight;
     public GameSessionManager gameManager;
-    public Transform resetPoint; // Un punct gol unde să fie teleportat jucătorul
+    public Transform resetPoint;
 
     private void OnTriggerEnter(Collider other) 
     {
-        // Căutăm XR Origin în părinții obiectului care a atins trigger-ul
-        // pentru a teleporta tot sistemul XR, nu doar o mână.
-        GameObject playerRoot = other.transform.root.gameObject; 
+        Transform playerTransform = other.transform.root;
 
-        if (other.CompareTag("Player") || playerRoot.CompareTag("Player")) 
-        { 
-            if (!trafficLight.IsSafeToCross()) 
+        if (playerTransform.CompareTag("Player") && !trafficLight.IsSafeToCross()) 
+        {
+            if (gameManager != null) gameManager.JucatorTrecutPeRosu();
+
+            CharacterController cc = playerTransform.GetComponentInChildren<CharacterController>();
+
+            if (cc != null) 
             {
-                gameManager.JucatorTrecutPeRosu();
-            
-                // Teleportăm întreaga structură XR Origin
-                playerRoot.transform.position = resetPoint.position;
-            
-                Debug.Log("Jucător teleportat pentru că a trecut pe roșu!");
+                cc.enabled = false;
+                
+                playerTransform.position = resetPoint.position;
+                playerTransform.rotation = resetPoint.rotation;
+                
+                Physics.SyncTransforms();
+                
+                cc.enabled = true;
             }
+            else 
+            {
+                playerTransform.SetPositionAndRotation(resetPoint.position, resetPoint.rotation);
+            }
+            
+            Debug.Log("Pedestrian Safety Trigger Entered");
         }
     }
 }
