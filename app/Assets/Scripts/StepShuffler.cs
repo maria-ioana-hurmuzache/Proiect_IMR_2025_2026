@@ -24,17 +24,15 @@ public class StepShuffler : MonoBehaviour
 
     private bool isShuffling = false;
     private bool isHeld = false;
-    
-    // Salvăm poziția X și Y inițială a primei pagini pentru a păstra alinierea
-    private Vector2 initialXY;
-    private Vector3 containerInitialLocalPos;
+    private Vector2 fixedPageXY;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         grabInteractable = GetComponent<XRGrabInteractable>();
-        
         if(rb) rb.isKinematic = true;
+        
+        Debug.Log($"[StepShuffler] Awake: Obiectul '{gameObject.name}' este la poziția World {transform.position}");
     }
 
     private void OnEnable()
@@ -44,25 +42,38 @@ public class StepShuffler : MonoBehaviour
         if (shuffleAction != null) shuffleAction.action.Enable();
     }
 
-    private void OnDisable()
-    {
-        grabInteractable.selectEntered.RemoveListener(OnGrabbed);
-        grabInteractable.selectExited.RemoveListener(OnReleased);
-        if (shuffleAction != null) shuffleAction.action.Disable();
-    }
+    // Modificăm Start să fie mai robust
+private IEnumerator Start()
+{
+    if (pagesContainer == null) yield break;
 
-    private void Start()
+    // Așteptăm un moment pentru stabilitate
+    yield return new WaitForEndOfFrame();
+
+    RefreshPagesListOnly();
+    
+    // FORȚĂM originea. Nu mai citim din pagini, 
+    // deoarece am resetat paginile la (0,0,0) în Editor.
+    fixedPageXY = Vector2.zero; 
+
+    ApplyDepthOffsets();
+    
+    Debug.Log($"[StepShuffler] Paginile au fost aliniate la centrul local al {pagesContainer.name}");
+}
+private void ApplyDepthOffsets()
+{
+    for (int i = 0; i < pages.Count; i++)
     {
-        // Memorăm exact unde ai pus tu PagesContainer în editor față de Step-ul respectiv
-        if (pagesContainer != null)
-        {
-            containerInitialLocalPos = pagesContainer.localPosition;
-        }
+        float targetZ = -i * pageDepthOffset;
+        // Folosim LocalPosition pentru a rămâne lipite de "Step 1" oriunde s-ar mișca el
+        pages[i].localPosition = new Vector3(fixedPageXY.x, fixedPageXY.y, targetZ);
+        pages[i].localRotation = Quaternion.identity;
         
-        RefreshPagesListOnly();
-        ApplyDepthOffsets();
+        // Asigură-te că paginile nu au alt Rigidbody!
+        Rigidbody rbChild = pages[i].GetComponent<Rigidbody>();
+        if(rbChild) Destroy(rbChild); 
     }
-
+}
     private void Update()
     {
         if (!isHeld || isShuffling || pages.Count <= 1) return;
@@ -79,9 +90,9 @@ public class StepShuffler : MonoBehaviour
     private IEnumerator AnimateShuffleFull(Transform page)
     {
         isShuffling = true;
+        Debug.Log($"[StepShuffler] Încep shuffle pentru pagina: {page.name}");
 
         Vector3 startPos = page.localPosition;
-        // Ridicăm pagina pe axa Y locală, păstrând X-ul ei original
         Vector3 peakPos = new Vector3(startPos.x, startPos.y + exitHeight, startPos.z);
         
         float elapsed = 0f;
@@ -95,10 +106,9 @@ public class StepShuffler : MonoBehaviour
         page.SetAsLastSibling();
         RefreshPagesListOnly();
         
-        // Calculăm noua poziție Z (la fundul teancului)
         float targetZ = -(pages.Count - 1) * pageDepthOffset;
-        Vector3 finalPos = new Vector3(initialXY.x, initialXY.y, targetZ);
-        Vector3 dropPeak = new Vector3(initialXY.x, initialXY.y + exitHeight, targetZ);
+        Vector3 finalPos = new Vector3(fixedPageXY.x, fixedPageXY.y, targetZ);
+        Vector3 dropPeak = new Vector3(fixedPageXY.x, fixedPageXY.y + exitHeight, targetZ);
 
         page.localPosition = dropPeak;
         page.localRotation = Quaternion.identity;
@@ -113,24 +123,6 @@ public class StepShuffler : MonoBehaviour
 
         isShuffling = false;
         ApplyDepthOffsets();
-    }
-
-    private void ApplyDepthOffsets()
-    {
-        for (int i = 0; i < pages.Count; i++)
-        {
-            // Luăm poziția locală așa cum ai setat-o tu manual în Editor
-            Vector3 currentLocalPos = pages[i].localPosition;
-
-            // Calculăm adâncimea dorită
-            float targetZ = -i * pageDepthOffset;
-
-            // Păstrăm X și Y intacte (cele setate de tine), schimbăm doar Z
-            pages[i].localPosition = new Vector3(currentLocalPos.x, currentLocalPos.y, targetZ);
-            
-            // Resetăm rotația să fie aliniată cu containerul
-            pages[i].localRotation = Quaternion.identity;
-        }
     }
 
     private void RefreshPagesListOnly()
