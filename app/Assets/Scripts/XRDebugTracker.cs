@@ -15,33 +15,35 @@ public class XRDebugTracker : MonoBehaviour
     void Start()
     {
         Debug.Log($"<color=cyan>[Diagnostic] {name} Start.</color> Global: {transform.position}");
-        // Verificăm dacă s-a mutat deja față de Awake
+        
+        // Check if the object moved between Awake and Start
         if (transform.position != startGlobalPos)
         {
-            Debug.LogWarning($"<color=red>[ALERTA] {name} s-a mutat între Awake și Start!</color>");
+            Debug.LogWarning($"<color=red>[ALERT] {name} moved between Awake and Start!</color>");
         }
         
-        // Verificăm poziția după ce XRIT s-a inițializat complet
+        // Check position after XR Interaction Toolkit has fully initialized
         Invoke(nameof(CheckPostInitialization), 2.0f);
     }
 
     void CheckPostInitialization()
     {
-        Debug.Log($"<color=yellow>[Diagnostic] {name} după 2 secunde.</color> Global: {transform.position}");
+        Debug.Log($"<color=yellow>[Diagnostic] {name} after 2 seconds.</color> Global: {transform.position}");
+        
         if (Vector3.Distance(transform.position, startGlobalPos) > 0.01f)
         {
-            Debug.LogError($"<color=red>[Diagnostic] {name} a fost mutat forțat de sistem! Poziție actuală: {transform.position}, Trebuia să fie: {startGlobalPos}</color>");
+            Debug.LogError($"<color=red>[Diagnostic] {name} was forced to move by the system! Current Position: {transform.position}, Expected: {startGlobalPos}</color>");
         }
         else
         {
-            Debug.Log("<color=green>[Diagnostic] Poziția este stabilă.</color>");
+            Debug.Log("<color=green>[Diagnostic] Position is stable.</color>");
         }
     }
 
     void Update()
     {
-        // Dacă obiectul dispare brusc, verificăm dacă are Scale 0 sau e foarte departe
+        // If the object disappears suddenly, check if it flew to extreme coordinates
         if (transform.localPosition.magnitude > 1000) 
-            Debug.LogError($"{name} a zburat la coordonate enorme!");
+            Debug.LogError($"{name} has flown to extreme coordinates!");
     }
 }
