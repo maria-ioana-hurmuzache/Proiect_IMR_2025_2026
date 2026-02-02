@@ -1330,7 +1330,7 @@ MonoBehaviour:
   pagesContainer: {fileID: 1575005507}
   animationDuration: 0.3
   exitHeight: 0.3
-  shuffleAction: {fileID: 0}
+  shuffleAction: {fileID: 83097790271614945, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   pageDepthOffset: 0.002
 --- !u!1 &155938802
 GameObject:
@@ -3627,7 +3627,7 @@ MonoBehaviour:
   pagesContainer: {fileID: 1339056408}
   animationDuration: 0.3
   exitHeight: 0.3
-  shuffleAction: {fileID: 0}
+  shuffleAction: {fileID: 83097790271614945, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   pageDepthOffset: 0.002
 --- !u!1 &442520072
 GameObject:
@@ -7517,7 +7517,7 @@ MonoBehaviour:
   pagesContainer: {fileID: 161397023}
   animationDuration: 0.3
   exitHeight: 0.3
-  shuffleAction: {fileID: 0}
+  shuffleAction: {fileID: 83097790271614945, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   pageDepthOffset: 0.002
 --- !u!114 &924880013
 MonoBehaviour:
@@ -12285,6 +12285,7 @@ MonoBehaviour:
   redDuration: 10
   redToGreenDuration: 2
   currentPhase: 0
+  gameManager: {fileID: 0}
 --- !u!114 &1582656084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13417,7 +13418,7 @@ MonoBehaviour:
   pagesContainer: {fileID: 558541226}
   animationDuration: 0.3
   exitHeight: 0.3
-  shuffleAction: {fileID: 0}
+  shuffleAction: {fileID: 83097790271614945, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   pageDepthOffset: 0.002
 --- !u!1 &1718252009
 GameObject:
@@ -15358,7 +15359,7 @@ MonoBehaviour:
   pagesContainer: {fileID: 301248179}
   animationDuration: 0.3
   exitHeight: 0.3
-  shuffleAction: {fileID: 0}
+  shuffleAction: {fileID: 83097790271614945, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   pageDepthOffset: 0.002
 --- !u!114 &1901057177
 MonoBehaviour:
@@ -16078,7 +16079,7 @@ MonoBehaviour:
   pagesContainer: {fileID: 467166130}
   animationDuration: 0.3
   exitHeight: 0.3
-  shuffleAction: {fileID: 0}
+  shuffleAction: {fileID: 83097790271614945, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   pageDepthOffset: 0.002
 --- !u!1001 &2081449601
 PrefabInstance:
@@ -16286,6 +16287,7 @@ MonoBehaviour:
   redDuration: 10
   redToGreenDuration: 2
   currentPhase: 0
+  gameManager: {fileID: 0}
 --- !u!1 &2130298100
 GameObject:
   m_ObjectHideFlags: 0
