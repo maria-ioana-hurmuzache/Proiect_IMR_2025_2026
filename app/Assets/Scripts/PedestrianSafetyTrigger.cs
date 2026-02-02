@@ -12,7 +12,7 @@ public class PedestrianSafetyTrigger : MonoBehaviour
 
         if (playerTransform.CompareTag("Player") && !trafficLight.IsSafeToCross()) 
         {
-            if (gameManager != null) gameManager.JucatorTrecutPeRosu();
+            if (gameManager != null) gameManager.PlayerCrossedIllegally();
 
             CharacterController cc = playerTransform.GetComponentInChildren<CharacterController>();
 

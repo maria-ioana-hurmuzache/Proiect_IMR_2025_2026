@@ -3,8 +3,8 @@ using UnityEngine;
 public class FloatingStep : MonoBehaviour
 {
     private Rigidbody rb;
-    public float targetHeight = 0.6f; // Înălțimea medie a ochilor în metri
-    public float floatStrength = 5f;  // Cât de repede revine la nivelul ochilor
+    public float targetHeight = 0.6f; // Average sight height
+    public float floatStrength = 5f;  // How fast it reaches eye level again
     private UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable grab;
 
     void Awake()
@@ -15,13 +15,13 @@ public class FloatingStep : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Dacă NU ținem obiectul în mână, aplicăm forța de plutire
+        // If object is not grabbed then it floats
         if (grab != null && !grab.isSelected)
         {
-            // Calculăm diferența de înălțime
+            // Compute the height difference
             float heightError = targetHeight - transform.position.y;
             
-            // Aplicăm o forță verticală proporțională cu eroarea (ca un resort)
+            // Apply a vertical force equal to the height difference (similar to a resort)
             Vector3 liftingForce = Vector3.up * heightError * floatStrength;
             
             rb.AddForce(liftingForce, ForceMode.Acceleration);

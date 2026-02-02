@@ -4,33 +4,30 @@ using UnityEngine.SceneManagement;
 
 public class GameSessionManager : MonoBehaviour
 {
-    [Header("Referințe XR")]
     public Transform xrCameraTransform;
     
-    [Header("Setari Timp")]
-    public float timeRemaining = 300f;
+    public float timeRemaining = 30f;
     public bool isTestMode;
 
-    [Header("Status Task-uri")]
-    public bool aVerificatPulsul;
-    public bool aSunatLa112;
-    public int treceriPeRosu;
+    public bool hasVerifiedPulse;
+    public bool hasMadeEmergencyCall;
+    public int illegalCrossingsCounter;
+    public CprPressTracker cprPressTracker;
 
-    [Header("UI Feedback")]
     public GameObject feedbackCanvas;
     public TextMeshProUGUI textFeedback;
 
-    private bool jocTerminat;
+    private bool finishedGame;
 
     void Start()
     {
-        if (isTestMode) timeRemaining = 420f;
+        if (isTestMode) timeRemaining = 42f;
         feedbackCanvas.SetActive(false);
     }
 
     void Update()
     {
-        if (jocTerminat) return;
+        if (finishedGame) return;
 
         if (timeRemaining > 0)
         {
@@ -38,20 +35,19 @@ public class GameSessionManager : MonoBehaviour
         }
         else
         {
-            FinalizeazaJocul("Timpul a expirat!");
+            FinishGame();
         }
     }
 
-    public void TaskPulsCompletat() => aVerificatPulsul = true;
-    public void Task112Completat() => aSunatLa112 = true;
+    public void SetHasVerifiedPulse() => hasVerifiedPulse = true;
+    public void SetHasMadeEmergencyCall() => hasMadeEmergencyCall = true;
 
-    public void JucatorTrecutPeRosu()
+    public void PlayerCrossedIllegally()
     {
-        treceriPeRosu++;
-        Debug.Log("Jucătorul a încercat să treacă pe roșu!");
+        illegalCrossingsCounter++;
     }
     
-    public void PozitioneazaCanvasInFataJucatorului()
+    private void PositionCanvasInFrontOfPlayer()
     {
         if (xrCameraTransform == null)
         {
@@ -64,28 +60,33 @@ public class GameSessionManager : MonoBehaviour
 
         feedbackCanvas.transform.position = spawnPos;
     
-        Vector3 targetPostion = new Vector3(xrCameraTransform.position.x, feedbackCanvas.transform.position.y, xrCameraTransform.position.z);
-        feedbackCanvas.transform.LookAt(targetPostion);
+        Vector3 targetPosition = new Vector3(xrCameraTransform.position.x, feedbackCanvas.transform.position.y, xrCameraTransform.position.z);
+        feedbackCanvas.transform.LookAt(targetPosition);
         feedbackCanvas.transform.Rotate(0, 180, 0); 
     }
 
-    public void FinalizeazaJocul(string mesajExtra = "")
+    private void FinishGame()
     {
-        jocTerminat = true;
-        PozitioneazaCanvasInFataJucatorului();
+        finishedGame = true;
+        PositionCanvasInFrontOfPlayer();
         feedbackCanvas.SetActive(true);
-
-        string raport = $"Rezultat Final:\n" +
-                        $"- Puls verificat: {(aVerificatPulsul ? "DA" : "NU")}\n" +
-                        $"- Apel 112: {(aSunatLa112 ? "DA" : "NU")}\n" +
-                        $"- Treceri pe roșu: {treceriPeRosu}\n" +
-                        mesajExtra;
         
-        textFeedback.text = raport;
+        float cprScore = (cprPressTracker != null) ? cprPressTracker.GetCprScore() : 0f;
+        
+        string report = $"Time has expired!\n" +
+                        $"Feedback:\n" +
+                        $"- Player has crossed the street illegally {illegalCrossingsCounter} times\n" +
+                        $"- Player has{(hasVerifiedPulse ? " " : " not ")} verified the victim's pulse\n" +
+                        $"- Player has{(hasMadeEmergencyCall ? " " : " not ")} made the emergency call\n" +
+                        $"- Player has{(cprScore > 0 ? " " : " not ")} performed CPR\n" +
+                        $"- CPR Score : {cprScore}%\n"
+                        ;
+        
+        textFeedback.text = report;
         Time.timeScale = 0;
     }
 
-    public void InapoiLaMeniu()
+    public void BackToMainMenu()
     {
         Time.timeScale = 1;
         SceneManager.LoadScene("MainMenu");

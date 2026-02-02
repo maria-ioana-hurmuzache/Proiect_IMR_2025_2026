@@ -3,31 +3,31 @@ using System.Collections.Generic;
 
 public class TrafficLight : MonoBehaviour
 {
-    // Obiectele luminoase pentru masini (RED, YELLOW, GREEN)
+    // Light objects for cars (RED, YELLOW, GREEN)
     public List<GameObject> redLights;
     public List<GameObject> yellowLights;
     public List<GameObject> greenLights;
 
-    // Obiectele luminoase pentru pietoni (RED, GREEN)
+    // Light objects for pedestrians (RED, GREEN)
     public List<GameObject> redPed;
     public List<GameObject> greenPed;
 
-    // Duratele fazelor (reglabil in Inspector)
+    // Phase durations (adjustable in the Inspector)
     public float greenDuration = 10f;
-    public float yellowToRedDuration = 3f; // Galben de avertizare (dinspre Verde)
-    public float redDuration = 10f;        // Rosu complet (pentru masini)
-    public float redToGreenDuration = 2f;  // <-- NOU: Rosu + Galben impreuna
+    public float yellowToRedDuration = 3f; // Warning yellow (transitioning from Green)
+    public float redDuration = 10f;        // Full red (for cars)
+    public float redToGreenDuration = 2f;  // Red + Yellow together (Preparation phase)
 
-    // Fazele ciclului de trafic
+    // Traffic cycle phases
     public enum LightPhase { Green, YellowToRed, Red, RedAndYellowToGreen };
     [HideInInspector]
     public LightPhase currentPhase;
 
-    private float cycleDuration; // Durata totala a unui ciclu
+    private float cycleDuration; // Total duration of one cycle
 
     private void Start()
     {
-        // Durata totala: Verde + Galben1 + Rosu + Rosu&Galben
+        // Total duration: Green + Yellow1 + Red + Red&Yellow
         cycleDuration = greenDuration + yellowToRedDuration + redDuration + redToGreenDuration;
         currentPhase = LightPhase.Green;
         UpdateLights();
@@ -38,33 +38,33 @@ public class TrafficLight : MonoBehaviour
         float t = Time.time % cycleDuration;
         LightPhase newPhase;
 
-        // --- Logica Fazei Galbene (cu 4 faze) ---
-        float time_Y1 = greenDuration; // Trecere la Galben de Avertizare
-        float time_R = time_Y1 + yellowToRedDuration; // Trecere la Rosu complet
-        float time_RY2 = time_R + redDuration; // Trecere la Rosu & Galben
+        // --- Yellow Phase Logic (with 4 phases) ---
+        float timeY1 = greenDuration; // Transition to Warning Yellow
+        float timeR = timeY1 + yellowToRedDuration; // Transition to Full Red
+        float timeRY2 = timeR + redDuration; // Transition to Red & Yellow
 
-        // 1. Faza Verde (Masini)
-        if (t < time_Y1)
+        // 1. Green Phase (Cars)
+        if (t < timeY1)
         {
             newPhase = LightPhase.Green;
         }
-        // 2. Faza Galbena de Avertizare (Verde -> Rosu)
-        else if (t < time_R)
+        // 2. Warning Yellow Phase (Green -> Red)
+        else if (t < timeR)
         {
             newPhase = LightPhase.YellowToRed;
         }
-        // 3. Faza Rosie (Masini) - Verde pentru Pietoni
-        else if (t < time_RY2)
+        // 3. Red Phase (Cars) - Green for Pedestrians
+        else if (t < timeRY2)
         {
             newPhase = LightPhase.Red;
         }
-        // 4. Faza Rosie & Galben (Pregatire -> Verde)
+        // 4. Red & Yellow Phase (Preparation -> Green)
         else
         {
             newPhase = LightPhase.RedAndYellowToGreen;
         }
 
-        // Verificam daca faza s-a schimbat
+        // Check if the phase has changed
         if (newPhase != currentPhase)
         {
             currentPhase = newPhase;
@@ -74,7 +74,7 @@ public class TrafficLight : MonoBehaviour
 
     private void UpdateLights()
     {
-        // Stingem toate luminile la inceputul fiecarei tranzitii
+        // Turn off all lights at the beginning of each transition
         SetLights(greenLights, false);
         SetLights(yellowLights, false);
         SetLights(redLights, false);
@@ -84,25 +84,25 @@ public class TrafficLight : MonoBehaviour
         switch (currentPhase)
         {
             case LightPhase.Green:
-                // Masini: VERDE; Pietoni: ROSU
+                // Cars: GREEN; Pedestrians: RED
                 SetLights(greenLights, true);
                 SetLights(redPed, true);
                 break;
 
             case LightPhase.YellowToRed:
-                // Masini: GALBEN; Pietoni: ROSU (Galbenul e scurt, pietonii raman pe rosu)
+                // Cars: YELLOW; Pedestrians: RED (Yellow is short, pedestrians stay on red)
                 SetLights(yellowLights, true);
                 SetLights(redPed, true);
                 break;
 
             case LightPhase.Red:
-                // Masini: ROSU; Pietoni: VERDE
+                // Cars: RED; Pedestrians: GREEN
                 SetLights(redLights, true);
                 SetLights(greenPed, true);
                 break;
 
             case LightPhase.RedAndYellowToGreen:
-                // Masini: ROSU & GALBEN; Pietoni: ROSU (Pietonii trebuie sa aiba semnalul rosu inainte de verdele masinilor)
+                // Cars: RED & YELLOW; Pedestrians: RED (Pedestrians must have red light before cars get green)
                 SetLights(redLights, true);
                 SetLights(yellowLights, true);
                 SetLights(redPed, true);
@@ -110,27 +110,26 @@ public class TrafficLight : MonoBehaviour
         }
     }
 
-    // Functie ajutatoare
+    // Helper function to toggle lists of light objects
     void SetLights(List<GameObject> lights, bool state)
     {
         if (lights != null)
         {
-            foreach (var light in lights)
+            foreach (var streetLight in lights)
             {
-                if (light != null)
+                if (streetLight != null)
                 {
-                    light.SetActive(state);
+                    streetLight.SetActive(state);
                 }
             }
         }
     }
     
-    // Adaugă la începutul clasei
     public GameSessionManager gameManager; 
 
-// Metodă nouă pentru a verifica dacă e sigur de traversat
+    // New method to check if it is safe to cross
     public bool IsSafeToCross() {
-        // În logica ta, pietonii au VERDE doar când masinile au ROSU
+        // In this logic, pedestrians have GREEN only when cars have RED
         return currentPhase == LightPhase.Red; 
     }
 }

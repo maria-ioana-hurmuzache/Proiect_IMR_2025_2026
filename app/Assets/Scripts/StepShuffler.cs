@@ -32,7 +32,7 @@ public class StepShuffler : MonoBehaviour
         grabInteractable = GetComponent<XRGrabInteractable>();
         if(rb) rb.isKinematic = true;
         
-        Debug.Log($"[StepShuffler] Awake: Obiectul '{gameObject.name}' este la poziția World {transform.position}");
+        Debug.Log($"[StepShuffler] Awake: Object '{gameObject.name}' is in position World {transform.position}");
     }
 
     private void OnEnable()
@@ -46,7 +46,6 @@ public class StepShuffler : MonoBehaviour
     {
         if (pagesContainer == null) yield break;
 
-        // se astepta un moment pentru stabilitate (xrit se calibreaza)
         yield return new WaitForEndOfFrame();
 
         RefreshPagesListOnly();
@@ -55,7 +54,7 @@ public class StepShuffler : MonoBehaviour
 
         ApplyDepthOffsets();
         
-        Debug.Log($"[StepShuffler] Paginile au fost aliniate la centrul local al {pagesContainer.name}");
+        Debug.Log($"[StepShuffler] Pages were aligned to the local center of {pagesContainer.name}");
     }
     private void ApplyDepthOffsets()
     {
@@ -85,7 +84,7 @@ public class StepShuffler : MonoBehaviour
     private IEnumerator AnimateShuffleFull(Transform page)
     {
         isShuffling = true;
-        Debug.Log($"[StepShuffler] Încep shuffle pentru pagina: {page.name}");
+        Debug.Log($"[StepShuffler] Starting shuffle for page: {page.name}");
 
         Vector3 startPos = page.localPosition;
         Vector3 peakPos = new Vector3(startPos.x, startPos.y + exitHeight, startPos.z);

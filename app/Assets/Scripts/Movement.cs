@@ -8,7 +8,7 @@ public class Movement : MonoBehaviour
     public float rotationSpeed = 2f;
     public float minDistance = 0.5f;
 
-    private int currentWaypointIndex = 0;
+    private int currentWaypointIndex;
 
     public TrafficLight trafficLightController;
 
@@ -26,7 +26,7 @@ public class Movement : MonoBehaviour
 
         if (trafficLightController == null)
         {
-            Debug.LogError("TrafficLight Controller nu este setat pe masina " + gameObject.name);
+            Debug.LogError("TrafficLight Controller not set on car " + gameObject.name);
         }
     }
 
