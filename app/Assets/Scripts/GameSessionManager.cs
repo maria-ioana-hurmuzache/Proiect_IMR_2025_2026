@@ -91,7 +91,7 @@ public class GameSessionManager : MonoBehaviour
         
         string report = $"Time has expired!\n" +
                         $"Feedback:\n" +
-                        $"- Player has crossed the street illegally {illegalCrossingsCounter} times\n" +
+                        $"- Player has crossed the street {(illegalCrossingsCounter > 0 ? "illegally." : "legally.")}\n" +
                         $"- Player has{(hasVerifiedPulse ? " " : " not ")} verified the victim's pulse\n" +
                         $"- Player has{(hasMadeEmergencyCall ? " " : " not ")} made the emergency call\n" +
                         $"- Player has{(cprScore > 0 ? " " : " not ")} performed CPR\n" +
