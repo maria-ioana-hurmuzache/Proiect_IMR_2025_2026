@@ -2105,8 +2105,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   xrCameraTransform: {fileID: 1463064072}
-  timeRemaining: 0
-  isTestMode: 1
+  timeRemaining: 30
+  isTestMode: 0
   timerText: {fileID: 1550910137}
   hasVerifiedPulse: 0
   hasMadeEmergencyCall: 0
