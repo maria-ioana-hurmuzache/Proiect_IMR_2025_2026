@@ -9,6 +9,7 @@ public class GameSessionManager : MonoBehaviour
     public float timeRemaining = 30f;
     public bool isTestMode;
 
+    public TextMeshProUGUI timerText;
     public bool hasVerifiedPulse;
     public bool hasMadeEmergencyCall;
     public int illegalCrossingsCounter;
@@ -29,14 +30,27 @@ public class GameSessionManager : MonoBehaviour
     {
         if (finishedGame) return;
 
-        if (timeRemaining > 0)
+        if(timeRemaining > 0)
         {
             timeRemaining -= Time.deltaTime;
+            UpdateTimerDisplay(timeRemaining);
         }
         else
         {
+            timeRemaining = 0;
+            UpdateTimerDisplay(0); 
             FinishGame();
         }
+    }
+
+    private void UpdateTimerDisplay(float timeToDisplay)
+    {
+        if (timerText == null) return;
+
+        float minutes = Mathf.FloorToInt(timeToDisplay / 60);
+        float seconds = Mathf.FloorToInt(timeToDisplay % 60);
+
+        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
     public void SetHasVerifiedPulse() => hasVerifiedPulse = true;
@@ -70,7 +84,9 @@ public class GameSessionManager : MonoBehaviour
         finishedGame = true;
         PositionCanvasInFrontOfPlayer();
         feedbackCanvas.SetActive(true);
-        
+
+        if (timerText != null) timerText.gameObject.SetActive(false);
+
         float cprScore = (cprPressTracker != null) ? cprPressTracker.GetCprScore() : 0f;
         
         string report = $"Time has expired!\n" +
