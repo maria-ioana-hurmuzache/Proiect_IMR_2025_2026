@@ -17,6 +17,7 @@ public class GameStartMenu : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1f;
         EnableMainMenu();
 
         if (trainingButton) trainingButton.onClick.AddListener(StartTraining);

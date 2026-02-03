@@ -6,7 +6,7 @@ public class GameSessionManager : MonoBehaviour
 {
     public Transform xrCameraTransform;
     
-    public float timeRemaining = 30f;
+    public float timeRemaining = 300f;
     public bool isTestMode;
 
     public TextMeshProUGUI timerText;
@@ -22,7 +22,7 @@ public class GameSessionManager : MonoBehaviour
 
     void Start()
     {
-        if (isTestMode) timeRemaining = 42f;
+        if (isTestMode) timeRemaining = 420f;
         feedbackCanvas.SetActive(false);
     }
 
@@ -91,7 +91,7 @@ public class GameSessionManager : MonoBehaviour
         
         string report = $"Time has expired!\n" +
                         $"Feedback:\n" +
-                        $"- Player has crossed the street illegally {illegalCrossingsCounter} times\n" +
+                        $"- Player has crossed the street {(illegalCrossingsCounter > 0 ? "illegally." : "legally.")}\n" +
                         $"- Player has{(hasVerifiedPulse ? " " : " not ")} verified the victim's pulse\n" +
                         $"- Player has{(hasMadeEmergencyCall ? " " : " not ")} made the emergency call\n" +
                         $"- Player has{(cprScore > 0 ? " " : " not ")} performed CPR\n" +
