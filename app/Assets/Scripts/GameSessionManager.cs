@@ -22,7 +22,7 @@ public class GameSessionManager : MonoBehaviour
 
     void Start()
     {
-        if (isTestMode) timeRemaining = 420f;
+        if (isTestMode) timeRemaining = 180f;
         feedbackCanvas.SetActive(false);
     }
 
