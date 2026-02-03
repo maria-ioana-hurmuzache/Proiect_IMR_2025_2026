@@ -6,7 +6,7 @@ public class GameSessionManager : MonoBehaviour
 {
     public Transform xrCameraTransform;
     
-    public float timeRemaining = 30f;
+    public float timeRemaining = 300f;
     public bool isTestMode;
 
     public TextMeshProUGUI timerText;
@@ -22,7 +22,7 @@ public class GameSessionManager : MonoBehaviour
 
     void Start()
     {
-        if (isTestMode) timeRemaining = 42f;
+        if (isTestMode) timeRemaining = 420f;
         feedbackCanvas.SetActive(false);
     }
 

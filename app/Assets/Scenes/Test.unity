@@ -2105,9 +2105,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   xrCameraTransform: {fileID: 1463064072}
-  timeRemaining: 90
+  timeRemaining: 0
   isTestMode: 1
-  timerText: {fileID: 0}
+  timerText: {fileID: 1550910137}
   hasVerifiedPulse: 0
   hasMadeEmergencyCall: 0
   illegalCrossingsCounter: 0
@@ -4286,17 +4286,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 731121049}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -8.77}
   m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1550910136}
   m_Father: {fileID: 307188427}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1.26, y: 1.2220001}
+  m_AnchoredPosition: {x: -0.03, y: 1.2220001}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &731121051
